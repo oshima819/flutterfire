@@ -79,11 +79,21 @@ class FirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
   final ScreenNameExtractor nameExtractor;
   final RouteFilter routeFilter;
   final void Function(PlatformException error)? _onError;
+  String? currentScreenName;
+  Map<String, Object?>? parameters;
+
+  void setParameters(Map<String, Object?>? value) => parameters = value;
 
   void _sendScreenView(Route<dynamic> route) {
     final String? screenName = nameExtractor(route.settings);
     if (screenName != null) {
-      analytics.setCurrentScreen(screenName: screenName).catchError(
+      currentScreenName = screenName;
+      parameters?..addAll({'screen_name': screenName});
+      analytics.logEvent(name: 'screen_view_event', parameters: parameters);
+      analytics
+          .setCurrentScreen(
+              screenName: screenName, screenClassOverride: screenName)
+          .catchError(
         (Object error) {
           final _onError = this._onError;
           if (_onError == null) {
