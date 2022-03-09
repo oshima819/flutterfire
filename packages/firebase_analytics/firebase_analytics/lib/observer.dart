@@ -90,7 +90,12 @@ class FirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
       currentScreenName = screenName;
       parameters?..addAll({'screen_name': screenName});
       analytics.logEvent(name: 'screen_view_event', parameters: parameters);
-      analytics.logEvent(name: 'screen_pv_$screenName', parameters: parameters);
+      if (screenName == '/') {
+        analytics.logEvent(name: 'screen_pv_root', parameters: parameters);
+      } else {
+        analytics.logEvent(
+            name: 'screen_pv_$screenName', parameters: parameters);
+      }
       analytics
           .setCurrentScreen(
               screenName: screenName, screenClassOverride: screenName)
