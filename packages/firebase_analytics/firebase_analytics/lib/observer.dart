@@ -98,7 +98,7 @@ class FirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
       }
       analytics
           .logScreenView(
-              screenName: screenName, screenClassOverride: screenName)
+              screenName: screenName, screenClass: screenName)
           .catchError(
         (Object error) {
           final _onError = this._onError;
